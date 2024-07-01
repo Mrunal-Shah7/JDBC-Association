@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public  class App {
@@ -22,6 +23,10 @@ public  class App {
         PreparedStatement insertStudent = connection.prepareStatement("insert into Student values (?,?)");
         PreparedStatement insertCourse = connection.prepareStatement("insert into Course values (?,?,?)");
         ResultSet resultSet;
+        PreparedStatement insertStudent_Course = connection.prepareStatement("insert into student_courses values (?,?)");
+        PreparedStatement getStudent_Course = connection.prepareStatement("select cId from student_courses where sId = ?");
+        PreparedStatement getCourseFromId = connection.prepareStatement("select name from course where cId = ?");
+        ArrayList<Integer> holder = new ArrayList<>();
 
 
 
@@ -88,7 +93,39 @@ public  class App {
                 case 3:
 
 
+                    statement.execute("create table if not exists Student_Courses(sId int , cId int , Primary Key(sId,cId),Foreign Key(sId) references Student(sId),Foreign Key(cId) references Course(cId))");
 
+                    System.out.println("Select Student ID:");
+                    resultSet = statement.executeQuery("select * from student");
+
+                    while (resultSet.next()){
+                        System.out.println(resultSet.getInt(1)+"\t"+resultSet.getString(2));
+                    }
+                    System.out.print("-->");
+                    int stuIndex = input.nextInt();
+
+
+                    System.out.println("Select Course ID:");
+                    resultSet = statement.executeQuery("select * from course");
+
+                    while (resultSet.next()){
+                        System.out.println(resultSet.getInt(1)+"\t"+resultSet.getString(2));
+                    }
+                    System.out.print("-->");
+                    int corIndex = input.nextInt();
+
+
+                    insertStudent_Course.setInt(1,stuIndex);
+                    insertStudent_Course.setInt(2,corIndex);
+
+                    System.out.println(insertStudent_Course.executeUpdate()+" Rows Affected");
+
+
+
+
+
+
+                    /*     This code was used to locally associate courses with student by using arrayLists.
                     int i=1;
                     int j=1;
                     System.out.println("Select Student:");
@@ -111,11 +148,22 @@ public  class App {
                     course = Course.getCL().get(corIndex-1);
                     student.addCourse(course);
 
+
+                     */
                     System.out.println("Successfully added !");
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 break;
 
                 case 4:
+
+
+
+
+
+
+
+
+                    /*
                     int k=1;
                     int l=1;
                     System.out.println("Select Student:");
@@ -133,7 +181,9 @@ public  class App {
                         System.out.println(l+" "+cor.getCname());
                         l++;
                     }
-                    Thread.sleep(500);
+
+                     */
+                    Thread.sleep(1000);
 
                 break;
 
