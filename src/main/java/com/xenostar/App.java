@@ -24,10 +24,7 @@ public  class App {
         PreparedStatement insertCourse = connection.prepareStatement("insert into Course values (?,?,?)");
         ResultSet resultSet;
         PreparedStatement insertStudent_Course = connection.prepareStatement("insert into student_courses values (?,?)");
-        PreparedStatement getStudent_Course = connection.prepareStatement("select cId from student_courses where sId = ?");
-        PreparedStatement getCourseFromId = connection.prepareStatement("select name from course where cId = ?");
-        ArrayList<Integer> holder = new ArrayList<>();
-
+        PreparedStatement joinStatement = connection.prepareStatement("select course.name from course inner join student_courses on course.cid = student_courses.cid where student_courses.sid=?");
 
 
 
@@ -156,9 +153,26 @@ public  class App {
 
                 case 4:
 
+                    System.out.println("Select the Student by ID:");
+                    resultSet = statement.executeQuery("select * from student");
 
+                    while (resultSet.next()){
+                        System.out.println(resultSet.getInt(1)+"\t"+resultSet.getString(2));
+                    }
 
+                    System.out.print("-->");
 
+                    stuIndex = input.nextInt();
+
+                    joinStatement.setInt(1,stuIndex);
+
+                    resultSet = joinStatement.executeQuery();
+
+                    System.out.println("Courses:");
+
+                    while (resultSet.next()){
+                        System.out.println(resultSet.getString(1));
+                    }
 
 
 
